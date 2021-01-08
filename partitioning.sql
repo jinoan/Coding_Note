@@ -10,11 +10,11 @@ create or replace function create_partition_and_insert() returns trigger as
 			partition_date text;
 			partition text;
 		begin
-			partition_date := substring(to_char(new.lee_date, 'yyyy_mm_dd'), 1, 7);
+			partition_date := to_char(new.lee_date, 'yyyy_mm');
 			partition := tg_relname || '_' || partition_date;
 			if not exists(select relname from pg_class where relname=partition) then
 				raise notice 'a partition has been created %', partition;
-				execute 'create table ' || partition || ' (check (lee_date = ''' || new.lee_date || ''')) inherits ('|| tg_relname ||');';
+				execute 'create table ' || partition || ' (check (to_char(lee_date, ''yyyy_mm'') = ''' || partition_date || ''')) inherits ('|| tg_relname ||');';
 			end if;
 			execute 'insert into ' || partition || ' select ('|| tg_relname || '' || quote_literal(new) ||').* returning *;';
 			return null;
