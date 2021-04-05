@@ -166,7 +166,7 @@ def update_pog(session, company_id, store_id, device_id, df, operation=False):
 
 
 if __name__ == '__main__':
-    print('Start pog updator {}')
+    print('Start pog updator')
 
     if args.engine == "main":
         engine = create_engine(f"postgresql://postgres:{cipher.get('postgres_key')}@{cipher.get('main_db_endpoint')}:5432/emart24")
